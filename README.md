@@ -24,7 +24,11 @@ It does not prevent a malicious party from fabricating a receipt unless digital 
 ### 1. Requirements
 - Python 3.6+
 
-### 2. Verify an Example
+### 2. Interactive Tutorial 
+👉 **[Try the Interactive Notebook](examples/interactive_verification.ipynb)**  
+Walks through the verification logic step-by-step with a live example and simulated tampering.
+
+### 3. CLI Verification
 Run the verifier on the included example receipt:
 ```bash
 python tools/tranzia-verify.py examples/receipt_example_v1.json
