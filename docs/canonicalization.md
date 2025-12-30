@@ -35,19 +35,23 @@ We use a strict subset of JSON to ensure identical byte streams across languages
 import json
 
 def canonical_json(obj) -> str:
+    # IMPORTANT: Input `obj` must strictly contain only: dict, list, str, int, float, bool, None.
+    # No custom objects, Decimals, or datetimes.
     return json.dumps(
         obj, 
         sort_keys=True, 
         separators=(',', ':'), 
-        ensure_ascii=False,
-        default=str
+        ensure_ascii=False
     )
 ```
 
 **JavaScript Implementation:**
 ```javascript
-const canonicalJson = (obj) => JSON.stringify(obj, Object.keys(obj).sort()); 
-// Note: JS JSON.stringify is usually compact by default, but key sorting requires manual intervention or a library like 'stable-stringify'.
+// Do NOT use JSON.stringify(obj, keys.sort()) as it is not recursive.
+// Use a library like 'json-stable-stringify' or similar.
+import stringify from 'json-stable-stringify';
+
+const canonicalString = stringify(obj);
 ```
 
 ## 3. Hashing

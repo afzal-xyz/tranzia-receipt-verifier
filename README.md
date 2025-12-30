@@ -7,8 +7,8 @@ This repository contains the standalone tools to verify that a "Decision Receipt
 ## What is this?
 Tranzia issues "Defensible Decision Receipts" (audit logs) for every safety risk assessment. These receipts are cryptographically hashed at the time of creation.
 This tool allows you to take any exported receipt (JSON) and re-compute its hash to prove:
-1. **Authenticity**: It came from our engine.
-2. **Integrity**: It has not been modified since creation.
+1. **Integrity**: Detects tampering after issuance (hash mismatch).
+2. **Provenance**: Authenticity is established via trusted export channels (e.g. HTTPS/TLS from Tranzia).
 3. **Resilience**: You can verify this forever, even without Tranzia servers.
 
 ## Quick Start

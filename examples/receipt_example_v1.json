@@ -157,8 +157,9 @@
         "Receipt documents what was evaluated at decision time given available signals."
     ],
     "integrity": {
-        "canonical_receipt_hash": "sha256:7f4a...92d1",
+        "canonical_receipt_hash": "8ecd11d17198643fd15a64173205a163cd66bc5a03cc6b44322c82d9466bc132",
         "hash_alg": "sha256",
+        "version": "1.0",
         "signature": null,
         "key_id": null
     }

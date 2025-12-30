@@ -16,13 +16,17 @@ def canonical_json(obj) -> str:
     Produce stable JSON string for hashing.
     Matches Tranzia Backend: Sorted keys, compact separators (no spaces), UTF-8.
     """
-    return json.dumps(
-        obj, 
-        sort_keys=True, 
-        separators=(',', ':'), 
-        ensure_ascii=False,
-        default=str
-    )
+    # Strict mode: No default=str. Input must be native JSON types.
+    try:
+        return json.dumps(
+            obj, 
+            sort_keys=True, 
+            separators=(',', ':'), 
+            ensure_ascii=False
+        )
+    except TypeError as e:
+        print(f"ERROR: Receipt contains non-JSON types (e.g. datetime/Decimal): {e}")
+        sys.exit(1)
 
 def sha256_hex(data: str) -> str:
     return hashlib.sha256(data.encode('utf-8')).hexdigest()
@@ -31,6 +35,9 @@ def verify_file(filepath):
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             receipt = json.load(f)
+    except json.JSONDecodeError:
+        print(f"ERROR: File is not valid JSON: {filepath}")
+        return False
     except Exception as e:
         print(f"ERROR: Could not read file: {e}")
         return False
@@ -38,7 +45,7 @@ def verify_file(filepath):
     # 1. Extract Integrity Block
     integrity = receipt.get("integrity")
     if not integrity:
-        print("FAIL: No integrity block found.")
+        print("FAIL: No integrity block found (field 'integrity' missing).")
         return False
         
     claimed_hash = integrity.get("canonical_receipt_hash")
