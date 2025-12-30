@@ -9,6 +9,6 @@ If you discover a vulnerability in this verifier, the canonicalization spec, or 
 **DO NOT create a public GitHub issue for security vulnerabilities.**
 
 Instead, please email:
-**security@tranzia.com**
+**support@tranzia.com**
 
 We will acknowledge your report within 48 hours.
