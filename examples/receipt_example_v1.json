@@ -1,0 +1,165 @@
+{
+    "receipt_version": "1.0",
+    "receipt_id": "01JYQ2B1X0Z7K7E9C9F8A2H5M3",
+    "created_at": "2025-12-30T16:22:11-05:00",
+    "tenant_id": "demo-healthcare-001",
+    "request": {
+        "input_hash": "sha256:0b9c...e31a",
+        "context": {
+            "local_time": "2025-12-30T23:40:00-05:00",
+            "timezone": "America/New_York",
+            "day_of_week": "Tuesday",
+            "mode": "walk",
+            "user_tags": [
+                "late_shift",
+                "solo_employee"
+            ]
+        },
+        "route": {
+            "origin": {
+                "lat": 40.7681,
+                "lng": -73.9819
+            },
+            "destination": {
+                "lat": 40.7616,
+                "lng": -73.9776
+            },
+            "distance_m": 1400,
+            "duration_s": 1080
+        }
+    },
+    "baseline_assessment": {
+        "risk_score_0_10": 7.8,
+        "drivers": [
+            {
+                "signal": "isolation_off_peak",
+                "severity": "severe",
+                "evidence": "Low foot traffic expected at 23:40; limited passive guardianship."
+            },
+            {
+                "signal": "night_visibility",
+                "severity": "high",
+                "evidence": "Nighttime; visibility constraints increase vulnerability."
+            },
+            {
+                "signal": "walk_segment_length",
+                "severity": "medium",
+                "evidence": "Continuous outdoor walking segment > 15 minutes."
+            }
+        ]
+    },
+    "policy": {
+        "policy_id": "healthcare-afterhours-commute",
+        "policy_version": "3.2",
+        "rules_evaluated": [
+            {
+                "rule_id": "R-101",
+                "result": "fail",
+                "reason": "No solo walking allowed after 22:00 for late shift."
+            },
+            {
+                "rule_id": "R-205",
+                "result": "warn",
+                "reason": "If walk unavoidable, require escort/buddy or rideshare subsidy."
+            }
+        ]
+    },
+    "options": [
+        {
+            "option_id": "opt-1",
+            "label": "Switch to rideshare pickup at origin (recommended)",
+            "action": "rideshare",
+            "risk": {
+                "score_0_10": 3.2,
+                "delta_vs_baseline": -4.6
+            },
+            "tradeoffs": {
+                "time_delta_min": 2,
+                "cost_delta_usd": 14.0,
+                "notes": "Estimated fares vary by demand."
+            },
+            "policy_alignment": {
+                "status": "pass",
+                "reason": "Meets after-hours policy by avoiding solo walk."
+            },
+            "explanation": {
+                "top_drivers": [
+                    "reduces isolation exposure",
+                    "reduces outdoor time",
+                    "policy-compliant"
+                ],
+                "notes": "Focus is defensibility, not guarantee."
+            }
+        },
+        {
+            "option_id": "opt-2",
+            "label": "Delay departure by 25 minutes",
+            "action": "delay",
+            "risk": {
+                "score_0_10": 6.6,
+                "delta_vs_baseline": -1.2
+            },
+            "tradeoffs": {
+                "time_delta_min": 25,
+                "cost_delta_usd": 0.0,
+                "notes": "Delay can improve foot-traffic conditions depending on area."
+            },
+            "policy_alignment": {
+                "status": "fail",
+                "reason": "Still violates 'no solo walk after 22:00'."
+            },
+            "explanation": {
+                "top_drivers": [
+                    "partial mitigation only",
+                    "still outdoor exposure",
+                    "policy violation remains"
+                ],
+                "notes": ""
+            }
+        },
+        {
+            "option_id": "opt-3",
+            "label": "Proceed on foot but reduce exposure: shorten walk via alternate pickup point",
+            "action": "reroute",
+            "risk": {
+                "score_0_10": 6.9,
+                "delta_vs_baseline": -0.9
+            },
+            "tradeoffs": {
+                "time_delta_min": 4,
+                "cost_delta_usd": 0.0,
+                "notes": "Minor reroute; still outdoor walking."
+            },
+            "policy_alignment": {
+                "status": "fail",
+                "reason": "Does not satisfy no-solo-walk rule."
+            },
+            "explanation": {
+                "top_drivers": [
+                    "reduces segment length slightly",
+                    "does not change time-of-day",
+                    "policy mismatch"
+                ],
+                "notes": ""
+            }
+        }
+    ],
+    "uncertainty": {
+        "coverage": "medium",
+        "known_gaps": [
+            "No real-time crowd sensor in baseline model",
+            "Incident feeds are incomplete by definition",
+            "Local lighting conditions are approximated"
+        ]
+    },
+    "disclaimers": [
+        "Advisory only. Tranzia does not predict, prevent, or guarantee safety outcomes.",
+        "Receipt documents what was evaluated at decision time given available signals."
+    ],
+    "integrity": {
+        "canonical_receipt_hash": "sha256:7f4a...92d1",
+        "hash_alg": "sha256",
+        "signature": null,
+        "key_id": null
+    }
+}

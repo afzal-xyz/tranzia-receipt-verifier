@@ -1,0 +1,373 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://tranzia.com/schemas/decision-receipt-v1.json",
+    "title": "Tranzia Decision Receipt v1",
+    "type": "object",
+    "required": [
+        "receipt_version",
+        "receipt_id",
+        "created_at",
+        "tenant_id",
+        "request",
+        "baseline_assessment",
+        "options",
+        "uncertainty",
+        "disclaimers",
+        "integrity"
+    ],
+    "properties": {
+        "receipt_version": {
+            "type": "string",
+            "const": "1.0"
+        },
+        "receipt_id": {
+            "type": "string",
+            "description": "UUID/ULID"
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "tenant_id": {
+            "type": "string"
+        },
+        "request": {
+            "type": "object",
+            "required": [
+                "input_hash",
+                "context",
+                "route"
+            ],
+            "properties": {
+                "input_hash": {
+                    "type": "string",
+                    "description": "Hash of canonicalized request payload"
+                },
+                "context": {
+                    "type": "object",
+                    "required": [
+                        "local_time",
+                        "day_of_week"
+                    ],
+                    "properties": {
+                        "local_time": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "timezone": {
+                            "type": "string"
+                        },
+                        "day_of_week": {
+                            "type": "string"
+                        },
+                        "mode": {
+                            "type": "string",
+                            "enum": [
+                                "walk",
+                                "transit",
+                                "drive",
+                                "rideshare",
+                                "mixed"
+                            ]
+                        },
+                        "user_tags": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "route": {
+                    "type": "object",
+                    "required": [
+                        "origin",
+                        "destination"
+                    ],
+                    "properties": {
+                        "origin": {
+                            "type": "object",
+                            "required": [
+                                "lat",
+                                "lng"
+                            ],
+                            "properties": {
+                                "lat": {
+                                    "type": "number"
+                                },
+                                "lng": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "destination": {
+                            "type": "object",
+                            "required": [
+                                "lat",
+                                "lng"
+                            ],
+                            "properties": {
+                                "lat": {
+                                    "type": "number"
+                                },
+                                "lng": {
+                                    "type": "number"
+                                }
+                            }
+                        },
+                        "distance_m": {
+                            "type": "number"
+                        },
+                        "duration_s": {
+                            "type": "number"
+                        }
+                    }
+                }
+            }
+        },
+        "baseline_assessment": {
+            "type": "object",
+            "required": [
+                "risk_score_0_10",
+                "drivers"
+            ],
+            "properties": {
+                "risk_score_0_10": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10
+                },
+                "drivers": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "signal",
+                            "severity",
+                            "evidence"
+                        ],
+                        "properties": {
+                            "signal": {
+                                "type": "string"
+                            },
+                            "severity": {
+                                "type": "string",
+                                "enum": [
+                                    "low",
+                                    "medium",
+                                    "high",
+                                    "severe"
+                                ]
+                            },
+                            "evidence": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policy": {
+            "type": "object",
+            "description": "Tenant policy evaluated at time of decision",
+            "properties": {
+                "policy_id": {
+                    "type": "string"
+                },
+                "policy_version": {
+                    "type": "string"
+                },
+                "rules_evaluated": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "rule_id",
+                            "result",
+                            "reason"
+                        ],
+                        "properties": {
+                            "rule_id": {
+                                "type": "string"
+                            },
+                            "result": {
+                                "type": "string",
+                                "enum": [
+                                    "pass",
+                                    "warn",
+                                    "fail"
+                                ]
+                            },
+                            "reason": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "options": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "required": [
+                    "option_id",
+                    "label",
+                    "risk",
+                    "tradeoffs",
+                    "policy_alignment",
+                    "explanation"
+                ],
+                "properties": {
+                    "option_id": {
+                        "type": "string"
+                    },
+                    "label": {
+                        "type": "string"
+                    },
+                    "action": {
+                        "type": "string",
+                        "enum": [
+                            "proceed",
+                            "delay",
+                            "reroute",
+                            "switch_mode",
+                            "rideshare",
+                            "escort",
+                            "split_trip"
+                        ]
+                    },
+                    "risk": {
+                        "type": "object",
+                        "required": [
+                            "score_0_10",
+                            "delta_vs_baseline"
+                        ],
+                        "properties": {
+                            "score_0_10": {
+                                "type": "number",
+                                "minimum": 0,
+                                "maximum": 10
+                            },
+                            "delta_vs_baseline": {
+                                "type": "number",
+                                "description": "Negative = safer"
+                            }
+                        }
+                    },
+                    "tradeoffs": {
+                        "type": "object",
+                        "required": [
+                            "time_delta_min",
+                            "cost_delta_usd"
+                        ],
+                        "properties": {
+                            "time_delta_min": {
+                                "type": "number"
+                            },
+                            "cost_delta_usd": {
+                                "type": "number"
+                            },
+                            "notes": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "policy_alignment": {
+                        "type": "object",
+                        "required": [
+                            "status",
+                            "reason"
+                        ],
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "pass",
+                                    "warn",
+                                    "fail"
+                                ]
+                            },
+                            "reason": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "explanation": {
+                        "type": "object",
+                        "required": [
+                            "top_drivers"
+                        ],
+                        "properties": {
+                            "top_drivers": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "maxItems": 3
+                            },
+                            "notes": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "uncertainty": {
+            "type": "object",
+            "required": [
+                "coverage",
+                "known_gaps"
+            ],
+            "properties": {
+                "coverage": {
+                    "type": "string",
+                    "enum": [
+                        "low",
+                        "medium",
+                        "high"
+                    ]
+                },
+                "known_gaps": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "disclaimers": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "integrity": {
+            "type": "object",
+            "required": [
+                "canonical_receipt_hash",
+                "hash_alg"
+            ],
+            "properties": {
+                "canonical_receipt_hash": {
+                    "type": "string"
+                },
+                "hash_alg": {
+                    "type": "string",
+                    "enum": [
+                        "sha256"
+                    ]
+                },
+                "signature": {
+                    "type": "string",
+                    "description": "Optional signature for verification"
+                },
+                "key_id": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
