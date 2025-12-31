@@ -20,6 +20,23 @@ It does not prevent a malicious party from fabricating a receipt unless digital 
 - **Spec version**: Decision Receipt v1.0
 - **Verifier release**: v1.0.1
 
+## API Integration
+The `tranzia-receipt-verifier` is part of the full Tranzia Trust Platform.
+
+👉 **[Full Integration Tutorial (Notebook)](examples/api_integration_tutorial.ipynb)**  
+Learn how to create an account, generate keys, score routes, and create defensible receipts programmatically.
+
+### Key Endpoints
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/v1/accounts/signup` | POST | Create organization account. |
+| `/v1/accounts/keys` | POST | Generate API Key (requires account_id). |
+| `/v1/score` | POST | **Raw Scoring**: Get 0-10 risk scores and routing data. |
+| `/v1/decision` | POST | **Decision Receipt**: Generate a signed, audit-grade artifact (Core Product). |
+| `/v1/audit/{id}` | GET | **Retrieve**: Get canonical JSON with ETag headers. |
+| `/v1/audit/{id}.pdf` | GET | **Export**: Download as PDF for consumers. |
+| `/v1/export/push` | POST | **BYOB**: Push receipts to your own S3 bucket. |
+
 ## Quick Start
 ### 1. Requirements
 - Python 3.6+
