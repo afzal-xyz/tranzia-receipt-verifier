@@ -23,7 +23,7 @@ It does not prevent a malicious party from fabricating a receipt unless digital 
 ## API Integration
 The `tranzia-receipt-verifier` is part of the full Tranzia Trust Platform.
 
-👉 **[Full Integration Tutorial (Notebook)](examples/api_integration_tutorial.ipynb)**  
+👉 **[Full Integration Tutorial (Notebook)](examples/api_integration_tutorial.ipynb)** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/afzal-xyz/tranzia-receipt-verifier/blob/main/examples/api_integration_tutorial.ipynb)  
 Learn how to create an account, generate keys, score routes, and create defensible receipts programmatically.
 
 ### Key Endpoints
@@ -42,7 +42,7 @@ Learn how to create an account, generate keys, score routes, and create defensib
 - Python 3.6+
 
 ### 2. Interactive Tutorial 
-👉 **[Try the Interactive Notebook](examples/interactive_verification.ipynb)**  
+👉 **[Try the Interactive Notebook](examples/interactive_verification.ipynb)** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/afzal-xyz/tranzia-receipt-verifier/blob/main/examples/interactive_verification.ipynb)  
 Walks through the verification logic step-by-step with a live example and simulated tampering.
 
 ### 3. CLI Verification
